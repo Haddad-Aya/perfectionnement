@@ -4,10 +4,13 @@ const router = express.Router()
 const partenaireController = require("../controller/partenaire.controller")
 
 router.get("/getAllPartenaire", partenaireController.getAllPartenaire)
-router.get("/getByIdPartenaire/:id", partenaireController.getByIdPartenaire)
+router.get("/getAllDemandePartenaire", partenaireController.getAllDemandePartenaire)
+router.get("/getByIdPartenaire/:idPartenaire", partenaireController.getByIdPartenaire)
 router.post("/createPartenaire", partenaireController.createPartenaire)
-router.put("/updatePartenaire/:id", partenaireController.updatePartenaire)
-router.delete("/deletePartenaire/:id", partenaireController.deletePartenaire)
+router.post("/demandePartenaire", partenaireController.demandePartenaire)
+router.put("/updatePartenaire/:idPartenaire", partenaireController.updatePartenaire)
+router.delete("/deletePartenaire/:idPartenaire", partenaireController.deletePartenaire)
+router.delete("/deleteDemandePartenaire/:idDemande", partenaireController.deleteDemandePartenaire)
 
 
 module.exports = router

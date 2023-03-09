@@ -18,8 +18,8 @@ getAllCategorie: async(req, res) => {
 },
 getByIdCategorie: async(req, res)=>{
     try{
-        const { id } = req.params
-        const [rows, fields]= await pool.query("select * from categorie where idCategorie = ?", [id])
+        const { idCategorie } = req.params
+        const [rows, fields]= await pool.query("select * from categorie where idCategorie = ?", [idCategorie])
         res.json({
             data:rows
         })
@@ -33,9 +33,9 @@ getByIdCategorie: async(req, res)=>{
 },
 createCategorie: async(req, res)=>{
     try{
-        const {nomCategorie,idProduit} = req.body
-        const sql= 'INSERT INTO categorie (nomCategorie,idProduit) value (?,?)'
-        const [rows, fields]= await pool.query(sql, [nomCategorie,idProduit])
+        const {nomCategorie} = req.body
+        const sql= 'INSERT INTO categorie (nomCategorie) value (?)'
+        const [rows, fields]= await pool.query(sql, [nomCategorie])
         res.json({
             data:rows
         })
@@ -49,10 +49,10 @@ createCategorie: async(req, res)=>{
 },
 updateCategorie: async(req, res)=>{
     try{
-        const { nomCategorie,idProduit } = req.body
-        const {id} = req.params
-        const sql= 'update categorie set  nomCategorie= ? , idProduit= ? where id = ?'
-        const [rows, fields]= await pool.query(sql,[id])
+        const { nomCategorie } = req.body
+        const {idCategorie} = req.params
+        const sql= 'update categorie set  nomCategorie= ? where idCategorie = ?'
+        const [rows, fields]= await pool.query(sql,[nomCategorie,idCategorie])
         res.json({
             data:rows
         })
@@ -66,8 +66,9 @@ updateCategorie: async(req, res)=>{
 },
 deleteCategorie: async(req, res)=>{
     try{
-        const id = req.params
-        const [rows, fields]= await pool.query('delete categorie where idCategorie = ?' ,[id])
+        const {idCategorie} = req.params
+        const sql='delete from categorie where idCategorie = ?'
+        const [rows, fields]= await pool.query(sql ,[idCategorie])
         res.json({
             data:rows
         })

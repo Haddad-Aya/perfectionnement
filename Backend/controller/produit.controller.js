@@ -18,8 +18,8 @@ getAllProduit: async(req, res) => {
 },
 getByIdProduit: async(req, res)=>{
     try{
-        const { id } = req.params
-        const [rows, fields]= await pool.query("select * from produit where idProduit = ?", [id])
+        const { idProduit } = req.params
+        const [rows, fields]= await pool.query("select * from produit where idProduit = ?", [idProduit])
         res.json({
             data:rows
         })
@@ -31,11 +31,45 @@ getByIdProduit: async(req, res)=>{
         })
     }
 },
+
+getByNomCategorie: async(req, res)=>{
+    try{
+        const { nomCategorie } = req.params
+        const sql='select * from produit where nomCategorie = ?'
+        const [rows, fields]= await pool.query(sql,[nomCategorie])
+        res.json({
+            data:rows
+        })
+
+    }catch(error){
+        console.log(error)
+        res.json({
+            status: "error"
+        })
+    }
+},
+getByNomProduit: async(req, res)=>{
+    try{
+        const { nom } = req.params
+        const sql='select * from produit where nom = ?'
+        const [rows, fields]= await pool.query(sql,[nom])
+        res.json({
+            data:rows
+        })
+
+    }catch(error){
+        console.log(error)
+        res.json({
+            status: "error"
+        })
+    }
+},
+
 createProduit: async(req, res)=>{
     try{
-        const { urlImage,etat,description,nom,prix } = req.body
-        const sql= 'INSERT INTO produit (urlImage,etat,description,nom,prix) value (?,?,?,?,?)'
-        const [rows, fields]= await pool.query(sql, [urlImage,etat,description,nom,prix])
+        const { urlImage,nom,prix,nomCategorie,quantite,description } = req.body
+        const sql= 'INSERT INTO produit (urlImage,nom,prix,nomCategorie,quantite,description) value (?,?,?,?,?,?)'
+        const [rows, fields]= await pool.query(sql, [urlImage,nom,prix,nomCategorie,quantite,description])
         res.json({
             data:rows
         })
@@ -49,10 +83,10 @@ createProduit: async(req, res)=>{
 },
 updateProduit: async(req, res)=>{
     try{
-        const { urlImage,etat,description,nom,prix } = req.body
-        const {id} = req.params
-        const sql= 'update produit set  urlImage= ? , etat= ? , description= ? , nom= ? , prix= ? where idProduit = ?'
-        const [rows, fields]= await pool.query(sql,[urlImage,etat,description,nom,prix,id])
+        const { urlImage,nom,prix,nomCategorie,quantite,description } = req.body
+        const {idProduit} = req.params
+        const sql= 'update produit set urlImage= ?  ,  nom= ? , prix= ? ,nomCategorie=?, quantite=?, description=? where idProduit = ?'
+        const [rows, fields]= await pool.query(sql,[urlImage,nom,prix,nomCategorie,quantite,description,idProduit])
         res.json({
             data:rows
         })
@@ -66,8 +100,25 @@ updateProduit: async(req, res)=>{
 },
 deleteProduit: async(req, res)=>{
     try{
-        const id = req.params
-        const [rows, fields]= await pool.query('delete produit where idProduit = ?' ,[id])
+        const {idProduit} = req.params
+        const sql='delete from produit where idProduit = ?'
+        const [rows, fields]= await pool.query(sql ,[idProduit])
+        res.json({
+            data:rows
+        })
+
+    }catch(error){
+        console.log(error)
+        res.json({
+            status: "error"
+        })
+    }
+},
+deleteProduitParCategorie: async(req, res)=>{
+    try{
+        const {nomCategorie} = req.params
+        const sql='delete from produit where nomCategorie = ?'
+        const [rows, fields]= await pool.query(sql ,[nomCategorie])
         res.json({
             data:rows
         })

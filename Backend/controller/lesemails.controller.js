@@ -19,7 +19,7 @@ getAllLesEmail: async(req, res) => {
 getByIdLesEmail: async(req, res)=>{
     try{
         const { id } = req.params
-        const [rows, fields]= await pool.query("select * from lesemails where idLesemails = ?", [id])
+        const [rows, fields]= await pool.query("select * from lesemails where idEmail = ?", [id])
         res.json({
             data:rows
         })
@@ -51,7 +51,7 @@ updateLesEmail: async(req, res)=>{
     try{
         const { email } = req.body
         const {id} = req.params
-        const sql= 'update lesemails set  email= ? where idLesemails = ?'
+        const sql= 'update lesemails set  email= ? where idEmail = ?'
         const [rows, fields]= await pool.query(sql,[email,id])
         res.json({
             data:rows
@@ -64,10 +64,11 @@ updateLesEmail: async(req, res)=>{
         })
     }
 },
-deleteLesEmail: async(req, res)=>{
+deleteEmail: async(req, res)=>{
     try{
-        const id = req.params
-        const [rows, fields]= await pool.query('delete lesemails where id = ?' ,[id])
+        const {idEmail} = req.params
+        const sql = 'delete from lesemails where idEmail = ?'
+        const [rows, fields]= await pool.query(sql,[idEmail])
         res.json({
             data:rows
         })

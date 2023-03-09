@@ -16,10 +16,26 @@ getAllBlog: async(req, res) => {
 
     } 
 },
+getAllBlogBody: async(req, res) => {
+    try{
+        const [rows, fields]= await pool.query("select * from blog limit 4")
+        res.json({
+            data: rows
+        })
+
+        
+    } catch (error) {
+        console.log(error)
+        res.json({
+            status: "error"
+        })
+
+    } 
+},
 getByIdBlog: async(req, res)=>{
     try{
-        const { id } = req.params
-        const [rows, fields]= await pool.query("select * from blog where idBlog = ?", [id])
+        const { idBlog } = req.params
+        const [rows, fields]= await pool.query("select * from blog where idBlog = ?", [idBlog])
         res.json({
             data:rows
         })
@@ -33,9 +49,9 @@ getByIdBlog: async(req, res)=>{
 },
 createBlog: async(req, res)=>{
     try{
-        const {urlImage,lienDetailBlog,date,question,contenu} = req.body
-        const sql= 'INSERT INTO blog (urlImage,lienDetailBlog,date,question,contenu) value (?,?,?,?,?,?)'
-        const [rows, fields]= await pool.query(sql, [urlImage,lienDetailBlog,date,question,contenu])
+        const {urlImage,date,question,contenu} = req.body
+        const sql= 'INSERT INTO blog (urlImage,date,question,contenu) value (?,?,?,?)'
+        const [rows, fields]= await pool.query(sql, [urlImage,date,question,contenu])
         res.json({
             data:rows
         })
@@ -49,10 +65,10 @@ createBlog: async(req, res)=>{
 },
 updateBlog: async(req, res)=>{
     try{
-        const { urlImage,lienDetailBlog,date,question,contenu } = req.body
-        const {id} = req.params
-        const sql= 'update blog set  urlImage= ? , lienDetailBlog= ? , date= ? , question= ? , contenu= ? where idBlog = ?'
-        const [rows, fields]= await pool.query(sql,[urlImage,lienDetailBlog,date,question,contenu,id])
+        const { urlImage,date,question,contenu } = req.body
+        const {idBlog} = req.params
+        const sql= 'update blog set  urlImage= ? , date= ? , question= ? , contenu= ? where idBlog = ?'
+        const [rows, fields]= await pool.query(sql,[urlImage,date,question,contenu,idBlog])
         res.json({
             data:rows
         })
@@ -66,8 +82,8 @@ updateBlog: async(req, res)=>{
 },
 deleteBlog: async(req, res)=>{
     try{
-        const id = req.params
-        const [rows, fields]= await pool.query('delete blog where idBlog = ?' ,[id])
+        const {idBlog} = req.params
+        const [rows, fields]= await pool.query('delete from blog where idBlog = ?' ,[idBlog])
         res.json({
             data:rows
         })

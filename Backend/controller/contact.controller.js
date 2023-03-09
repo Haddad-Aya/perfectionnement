@@ -6,8 +6,6 @@ getAllContact: async(req, res) => {
         res.json({
             data: rows
         })
-
-        
     } catch (error) {
         console.log(error)
         res.json({
@@ -18,8 +16,8 @@ getAllContact: async(req, res) => {
 },
 getByIdContact: async(req, res)=>{
     try{
-        const { id } = req.params
-        const [rows, fields]= await pool.query("select * from contact where idContact = ?", [id])
+        const { idContact } = req.params
+        const [rows, fields]= await pool.query("select * from contact where idContact = ?", [idContact])
         res.json({
             data:rows
         })
@@ -33,9 +31,9 @@ getByIdContact: async(req, res)=>{
 },
 createContact: async(req, res)=>{
     try{
-        const {nom,prenom,email,nomEnreprise,sujet,message} = req.body
-        const sql= 'INSERT INTO contact (nom,prenom,email,nomEnreprise,sujet,message) value (?,?,?,?,?)'
-        const [rows, fields]= await pool.query(sql, [nom,prenom,email,nomEnreprise,sujet,message])
+        const {nom,prenom,email,sujet,message} = req.body
+        const sql= 'INSERT INTO contact (nom,prenom,email,sujet,message) value (?,?,?,?,?)'
+        const [rows]= await pool.query(sql, [nom,prenom,email,sujet,message])
         res.json({
             data:rows
         })
@@ -49,10 +47,10 @@ createContact: async(req, res)=>{
 },
 updateContact: async(req, res)=>{
     try{
-        const { nom,prenom,email,nomEnreprise,sujet,message } = req.body
-        const {id} = req.params
-        const sql= 'update contact set nom = ? , prenom= ? , email= ? , sujet= ? , nomEnreprise= ? where idContact = ?'
-        const [rows, fields]= await pool.query(sql,[nom,prenom,email,nomEnreprise,sujet,message,id])
+        const { nom,prenom,email,sujet,message } = req.body
+        const {idContact} = req.params
+        const sql= 'update contact set nom = ? , prenom= ? , email= ? , sujet= ? ,message= ?  where idContact = ?'
+        const [rows, fields]= await pool.query(sql,[nom,prenom,email,sujet,message,idContact])
         res.json({
             data:rows
         })
@@ -66,8 +64,9 @@ updateContact: async(req, res)=>{
 },
 deleteContact: async(req, res)=>{
     try{
-        const id = req.params
-        const [rows, fields]= await pool.query('delete contact where idContact = ?' ,[id])
+        const {idContact} = req.params
+        const sql='delete from contact where idContact = ?'
+        const [rows, fields]= await pool.query(sql ,[idContact])
         res.json({
             data:rows
         })
